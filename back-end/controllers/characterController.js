@@ -1,0 +1,56 @@
+const Character = require('../models/Character');
+
+// Créer un personnage
+exports.createCharacter = async (req, res) => {
+    try {
+        const character = await Character.create(req.body);
+        res.status(201).json(character);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+};
+
+// Lire tous les personnages
+exports.getAllCharacters = async (req, res) => {
+    try {
+        const characters = await Character.find().populate('project relationships');
+        res.status(200).json(characters);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Lire un personnage par ID
+exports.getCharacterById = async (req, res) => {
+    try {
+        const character = await Character.findById(req.params.id).populate('project relationships');
+        if (!character) return res.status(404).json({ message: 'Personnage non trouvé' });
+        res.status(200).json(character);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Mettre à jour un personnage
+exports.updateCharacter = async (req, res) => {
+    try {
+        const character = await Character.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        });
+        if (!character) return res.status(404).json({ message: 'Personnage non trouvé' });
+        res.status(200).json(character);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+};
+
+// Supprimer un personnage
+exports.deleteCharacter = async (req, res) => {
+    try {
+        const character = await Character.findByIdAndDelete(req.params.id);
+        if (!character) return res.status(404).json({ message: 'Personnage non trouvé' });
+        res.status(200).json({ message: 'Personnage supprimé' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profil auteur</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .profile-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #333;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .profile-header h2 {
+      margin: 0;
+    }
+
+    .bio {
+      margin: 1rem 0;
+      font-style: italic;
+      color: #444;
+    }
+
+    .project-section {
+      margin-top: 2rem;
+    }
+
+    .project-section h3 {
+      margin-bottom: 1rem;
+    }
+
+    .project-card {
+      background: #f9f9f9;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+
+    .project-card a {
+      color: #0077cc;
+      text-decoration: none;
+    }
+
+    .tag {
+      background: #61dafb;
+      padding: 0.3rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      margin-right: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>👤 Profil de l’auteur</h1>
+    <a href="public.html" class="btn-secondary">⬅ Retour aux projets publics</a>
+  </header>
+
+  <main>
+    <div class="profile-container">
+      <div class="profile-header">
+        <img src="https://via.placeholder.com/100" alt="Avatar auteur" class="avatar" />
+        <div>
+          <h2>Kouassi</h2>
+          <p>@auteurAkane</p>
+        </div>
+      </div>
+
+      <div class="bio">
+        <p>Je suis un passionné d’afro fantasy et de narration visuelle. Je crée un monde où les masques cachent des pouvoirs, mais aussi des vérités. Bienvenue dans mon univers !</p>
+      </div>
+
+      <div class="project-section">
+        <h3>📚 Projets publics</h3>
+
+        <div class="project-card">
+          <h4><a href="projet.html">Akane, l'héritier masqué</a></h4>
+          <p>Un récit initiatique dans une Afrique alternative, entre masques de pouvoir et héritage familial complexe.</p>
+          <div>
+            <span class="tag">Fantasy</span>
+            <span class="tag">Afrofuturisme</span>
+            <span class="tag">Masques</span>
+          </div>
+        </div>
+
+        <!-- Plus de projets -->
+      </div>
+    </div>
+  </main>
+</body>
+</html>

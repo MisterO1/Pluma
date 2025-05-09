@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Détails du projet</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <script defer src="projet.js"></script>
+  <style>
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid #ddd;
+      margin-bottom: 1rem;
+    }
+
+    .tab {
+      padding: 1rem;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+
+    .tab.active {
+      border-color: #61dafb;
+      font-weight: bold;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Projet : Akane, l'héritier masqué</h1>
+    <a href="index.html" class="btn-secondary">⬅ Retour</a>
+  </header>
+
+  <main>
+    <div class="tabs">
+      <div class="tab active" data-tab="personnages">👤 Personnages</div>
+      <div class="tab" data-tab="peuples">🌍 Peuples</div>
+      <div class="tab" data-tab="scenes">⚔️ Scènes épiques</div>
+      <div class="tab" data-tab="pouvoirs">🔮 Pouvoirs</div>
+      <div class="tab" data-tab="chronologie">📅 Chronologie</div>
+    </div>
+
+    <div id="personnages" class="tab-content active">
+      <h2>Personnages</h2>
+      <p><strong>Akane</strong> — Un jeune garçon au destin incertain.</p>
+      <p><strong>Yug</strong> — Son protecteur mystérieux.</p>
+      <button class="btn-primary">➕ Ajouter un personnage</button>
+    </div>
+
+    <div id="peuples" class="tab-content">
+      <h2>Peuples</h2>
+      <p>Les Yaphets, les Ténites, les Chamites…</p>
+      <button class="btn-primary">➕ Ajouter un peuple</button>
+    </div>
+
+    <div id="scenes" class="tab-content">
+      <h2>Scènes Épiques</h2>
+      <p>⚔ La riposte contre les Ténites — menée par Kan et ses hommes.</p>
+      <button class="btn-primary">➕ Ajouter une scène</button>
+    </div>
+
+    <div id="pouvoirs" class="tab-content">
+      <h2>Systèmes de pouvoir</h2>
+      <p>Les masques anciens, les lignées de porteurs, les effets secondaires…</p>
+      <button class="btn-primary">➕ Ajouter un pouvoir</button>
+    </div>
+
+    <div id="chronologie" class="tab-content">
+      <h2>Chronologie</h2>
+      <p>Divisée en chapitres, arcs, sagas, ou saisons.</p>
+      <button class="btn-primary">➕ Ajouter un événement</button>
+    </div>
+  </main>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+
+        tab.classList.add('active');
+        const activeId = tab.getAttribute('data-tab');
+        document.getElementById(activeId).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

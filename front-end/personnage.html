@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fiche personnage</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .personnage-card {
+      border: 1px solid #ccc;
+      padding: 1.5rem;
+      border-radius: 10px;
+      background: #f9f9f9;
+      max-width: 800px;
+      margin: 2rem auto;
+    }
+
+    .personnage-card h2 {
+      margin-bottom: 0.5rem;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #61dafb;
+      color: #000;
+      padding: 0.3rem 0.7rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin: 0.2rem;
+    }
+
+    .comments {
+      margin-top: 2rem;
+    }
+
+    .comment {
+      padding: 1rem;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .btn-comment {
+      margin-top: 1rem;
+    }
+
+    .textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid #aaa;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Personnage : Akane</h1>
+    <a href="projet.html" class="btn-secondary">⬅ Retour au projet</a>
+  </header>
+
+  <main>
+    <div class="personnage-card">
+      <h2>Akane</h2>
+      <p><strong>Rôle :</strong> Protagoniste principal</p>
+      <p><strong>Origine :</strong> Né sur l’île de Tha, dans la région des Yaphets</p>
+      <p><strong>Parents :</strong> Nice (mère), père incertain (Kan ou Hector)</p>
+      <p><strong>Gardien :</strong> Yug</p>
+      <p><strong>Particularité :</strong> Né d’un viol et d’un amour, héritier d’un secret dangereux</p>
+
+      <h3>Tags / Liens :</h3>
+      <div>
+        <span class="tag">Yaphets</span>
+        <span class="tag">Masques</span>
+        <span class="tag">Ferkés</span>
+        <span class="tag">Fils de Nice</span>
+      </div>
+    </div>
+
+    <section class="comments">
+      <h2>💬 Commentaires publics</h2>
+
+      <div class="comment">
+        <p><strong>Lena :</strong> Ce personnage a une backstory puissante. Hâte d’en savoir plus sur sa relation avec Yug !</p>
+      </div>
+
+      <div class="comment">
+        <p><strong>JM :</strong> L’idée qu’il soit l’héritier de deux mondes opposés est géniale. Est-ce qu’il va découvrir la vérité ?</p>
+      </div>
+
+      <form class="btn-comment">
+        <label for="new-comment">Ajouter un commentaire :</label>
+        <textarea class="textarea" id="new-comment" rows="4" placeholder="Exprime ton avis sur Akane..."></textarea>
+        <button class="btn-primary" type="submit">Envoyer</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

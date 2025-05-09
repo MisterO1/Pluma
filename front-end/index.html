@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dashboard Auteur</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <script defer src="./js/index.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Ma Bibliothèque Créative</h1>
+        <button id="open-modal" class="btn-primary">➕ Créer un projet</button>
+    </header>
+
+    <main>
+        <h2>Mes projets</h2>
+        <div class="project-list" id="project-container">
+            <!-- <div class="project-card">
+                <h3>Akane, l'héritier masqué</h3>
+                <p>Status : En cours de conception</p>
+                <div class="project-actions">
+                    <button class="edit-btn" data-id="${project._id}">Modifier</button>
+                    <button class="delete-btn" data-id="${project._id}">Supprimer</button>
+                </div>
+                <a href="projet.html" class="btn-secondary">➡ Voir</a>
+            </div>
+            <div class="project-card">
+                <h3>Les Chroniques de Gon</h3>
+                <p>Status : Écriture en cours</p>
+                <div class="project-actions">
+                    <button class="edit-btn" data-id="${project._id}">Modifier</button>
+                    <button class="delete-btn" data-id="${project._id}">Supprimer</button>
+                </div>
+                <a href="projet.html" class="btn-secondary">➡ Voir</a>
+            </div> -->
+        </div>
+    </main>
+    <div class="modal-overlay"></div>
+    <div class="modal" id="project-modal">
+        <div class="modal-content">
+        <button class="close-modal">&times;</button>
+        <h3>Nouveau projet</h3>
+        <form id="project-form">
+            <label for="title">Titre du projet :</label>
+            <input type="text" id="title" name="title" required />
+
+            <label for="description">Description :</label>
+            <textarea id="description" name="description" required></textarea>https://github.com/MisterO1/Pluma.git
+
+            <button type="submit">Créer</button>
+        </form>
+        </div>
+    </div>
+</body>
+</html>

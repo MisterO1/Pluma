@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Projets publics</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .project-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+
+    .project-card {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      padding: 1.2rem;
+      transition: 0.3s ease;
+    }
+
+    .project-card:hover {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .project-card h3 {
+      margin-top: 0;
+    }
+
+    .tagline {
+      color: #555;
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+
+    .btn-view {
+      display: inline-block;
+      margin-top: 1rem;
+      background: #61dafb;
+      color: #000;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🌐 Projets publics des auteurs</h1>
+    <a href="index.html" class="btn-secondary">⬅ Accueil</a>
+  </header>
+
+  <main>
+    <section class="project-list">
+      <!-- Projet 1 -->
+      <div class="project-card">
+        <h3>Akane, l'héritier masqué</h3>
+        <p class="tagline">Un garçon né entre deux mondes…</p>
+        <p>Explorez une saga afro-fantastique autour des masques, des peuples anciens, et du lourd héritage qu'Akane doit porter.</p>
+        <a class="btn-view" href="projet.html">👁 Voir le projet</a>
+      </div>
+
+      <!-- Projet 2 (autre auteur) -->
+      <div class="project-card">
+        <h3>La Reine d'Ambora</h3>
+        <p class="tagline">Une épopée dans un empire oublié.</p>
+        <p>Un récit politique, magique et guerrier dans un royaume où les femmes ne peuvent pas régner… sauf une.</p>
+        <a class="btn-view" href="#">👁 Voir le projet</a>
+      </div>
+
+      <!-- Projet 3 -->
+      <div class="project-card">
+        <h3>Chroniques de Sumbura</h3>
+        <p class="tagline">Des peuples du feu et des glaces…</p>
+        <p>Ce projet explore la collision de civilisations tribales autour d’un volcan sacré. Pouvoirs chamaniques et conflits ancestraux.</p>
+        <a class="btn-view" href="#">👁 Voir le projet</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
