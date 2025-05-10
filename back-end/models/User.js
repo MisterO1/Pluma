@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+require('./Project')
+
 const userSchema = new mongoose.Schema(
 {
     username: {
@@ -32,7 +34,7 @@ const userSchema = new mongoose.Schema(
         },
     ],
     createdAt: {
-        type: Date,
+        type: Date, 
         default: Date.now,
     },
 },
@@ -51,7 +53,7 @@ userSchema.pre('save', async function (next) {
 
 // Méthode pour comparer le mot de passe
 userSchema.methods.matchPassword = async function (password) {
-  return await bcrypt.compare(password, this.password);
+    return await bcrypt.compare(password, this.password);
 };
 
 const User = mongoose.model('User', userSchema);

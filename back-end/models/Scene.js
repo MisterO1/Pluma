@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+require('./Project')
+
 const sceneSchema = new mongoose.Schema({
     project: {
         type: mongoose.Schema.Types.ObjectId,

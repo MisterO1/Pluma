@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dashboard Auteur</title>
+    <link rel="stylesheet" href="css/dashboard.css" />
+    <script defer src="./js/dashborad.js"></script>
+</head>
+<body>
+    <header>
+        <h1 class="greeting" >Bienvenue</h1>
+        <button id="open-modal" class="btn-primary">➕ Créer un projet</button>
+        <button id="logout-btn" class="logout-button">Se déconnecter</button>
+    </header>
+
+    <main>
+        <h2>Mes projets</h2>
+        <div class="project-list" id="projects-container"></div>
+    </main>
+    <div class="modal-overlay"></div>
+    <div class="modal" id="project-modal">
+        <div class="modal-content">
+        <button class="close-modal">&times;</button>
+        <h3>Nouveau projet</h3>
+        <form id="project-form">
+            <label for="title">Titre du projet :</label>
+            <input type="text" id="title" name="title" placeholder="titre du projet" required />
+
+            <label for="description">Description :</label>
+            <textarea id="description" name="description" placeholder="description du projet" required></textarea>
+
+            <button type="submit">Créer</button>
+        </form>
+        </div>
+    </div>
+</body>
+</html>

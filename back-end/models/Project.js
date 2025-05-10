@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 
+require('./Character')
+require('./User')
+
 const projectSchema = new mongoose.Schema(
 {
     title: {

@@ -1,21 +1,30 @@
 const express = require('express');
 const cors = require('cors');
-
-const projectRoutes = require('./routes/projectRoutes');
-const userRoutes = require('./routes/userRoutes');
-const characterRoutes = require('./routes/characterRoutes');
-
 const app = express();
 
+// Middlewares
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // pour parser le JSON
 
-app.use('/api/projects', projectRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/characters', characterRoutes);
+// Routes
+const userRoutes = require('./routes/userRoutes');
+const projectRoutes = require('./routes/projectRoutes');
+const sceneRoutes = require('./routes/sceneRoutes');
+const peopleRoutes = require('./routes/peopleRoutes');
+const powersystemRoutes = require('./routes/powersystemRoutes');
+const timelineRoutes = require('./routes/timelineRoutes');
 
+// Route de base pour tester que l'API fonctionne
 app.get('/', (req, res) => {
-    res.send('🚀 API de la plateforme de projets d’écriture');
+    res.send('Bienvenue sur l’API de Pluma');
 });
+
+// Utilisation des routes
+app.use('/api/users', userRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/scenes', sceneRoutes);
+app.use('/api/peoples', peopleRoutes);
+app.use('/api/powersystem', powersystemRoutes);
+app.use('/api/timeline', timelineRoutes);
 
 module.exports = app;

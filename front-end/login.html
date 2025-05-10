@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Connexion – Pluma</title>
+<!-- <link rel="stylesheet" href="./css/styles.css" /> -->
+<link rel="stylesheet" href="./css/login.css" />
+<script src="./js/login.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Bienvenue sur Pluma</h2>
+        
+        <div class="tabs">
+            <div class="tab active" id="login-tab">Connexion</div>
+            <div class="tab" id="signup-tab">S’inscrire</div>
+        </div>
+
+        <form id="login-form" class="active">
+            <input type="email" id="login-email" placeholder="Email" required />
+            <input type="password" id="login-password" placeholder="Mot de passe" required />
+            <button type="submit">Se connecter</button>
+            <div class="message" id="login-message"></div>
+        </form>
+
+        <form id="signup-form" autocomplete="on">
+            <input type="text" id="signup-name" placeholder="Username" required />
+            <input type="email" id="signup-email" placeholder="Email" required />
+            <input type="password" id="signup-password" placeholder="Mot de passe" required />
+            <button type="submit">Créer un compte</button>
+            <div class="message" id="signup-message"></div>
+        </form>
+    </div>
+</body>
+</html>

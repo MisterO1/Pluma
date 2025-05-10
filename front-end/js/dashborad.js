@@ -1,4 +1,19 @@
+const baseUrl = "http://localhost:5000"
+
 document.addEventListener("DOMContentLoaded", () => {
+
+    // redirection if not logged on
+    const token = localStorage.getItem("token");
+        if (!token) {
+            window.location.href = "./login.html";
+        }
+    
+    // greet the user
+    username = localStorage.getItem("username")
+    if (username) {
+        document.querySelector(".greeting").textContent = `Bienvenue ${username}`
+    }
+        
     const form = document.getElementById("project-form");
     const modal = document.getElementById("project-modal");
     const modalOverlay = document.querySelector(".modal-overlay");
@@ -27,21 +42,23 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!title || !description) return;
 
         try {
-        const response = await fetch("/api/projects", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ title, description }),
-        });
+            const response = await fetch(baseUrl+"/api/projects", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, description }),
+            });
 
-        if (!response.ok) throw new Error("Erreur lors de la création du projet");
-        const newProject = await response.json();
+            if (!response.ok) throw new Error("Erreur lors de la création du projet");
+            const newProject = await response.json();
+            console.log(newProject)
 
-        displayProject(newProject, true); // Ajoute avec animation
+            displayProject(newProject, true); // Ajoute avec animation
+            console.log("displayed")
 
-        form.reset(); // Réinitialiser le formulaire
-        form.onsubmit = null;
-        modal.classList.remove("open");
-        modalOverlay.classList.remove("active");
+            form.reset(); // Réinitialiser le formulaire
+            form.onsubmit = null;
+            modal.classList.remove("open");
+            modalOverlay.classList.remove("active");
 
         } catch (error) {
         console.error(error);
@@ -49,13 +66,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // === Charger tous les projets au démarrage ===
-    async function fetchProjects() {
+    async function loadProjects() {
         try {
-        const response = await fetch("/api/projects");
-        const projects = await response.json();
-        projects.reverse().forEach(project => displayProject(project));
+            const response = await fetch(baseUrl+"/api/projects");
+            const projects = await response.json();
+            projects.reverse().forEach(project => displayProject(project));
         } catch (error) {
-        console.error("Erreur lors du chargement des projets :", error);
+            console.error("Erreur lors du chargement des projets :", error);
         }
     }
 
@@ -80,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-    fetchProjects(); // Initialiser le chargement
+    loadProjects(); // Initialiser le chargement
 
     function openEditModal(project) {
         form.title.value = project.title;
@@ -95,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const updatedDesc = form.description.value.trim();
 
             try {
-            const res = await fetch(`/api/projects/${project._id}`, {
+            const res = await fetch(`${baseUrl}/api/projects/${project._id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ title: updatedTitle, description: updatedDesc }),
@@ -116,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!confirmDelete) return;
 
         try {
-            const res = await fetch(`/api/projects/${id}`, { method: "DELETE" });
+            const res = await fetch(`${baseUrl}/api/projects/${id}`, { method: "DELETE" });
             if (!res.ok) throw new Error("Erreur suppression");
 
             cardElement.remove(); // Retire du DOM
@@ -124,4 +141,13 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error(err);
         }
     }
+
+    document.getElementById("logout-btn").addEventListener("click", () => {
+        const confirmLogout = confirm("Voulez-vous vraiment vous déconnecter ?");
+        if (confirmLogout) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("userName");
+            window.location.href = "./login.html";
+        }
+    });
 });

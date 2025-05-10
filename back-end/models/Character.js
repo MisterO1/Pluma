@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+require('./Project')
+
 const characterSchema = new mongoose.Schema(
 {
     name: {
@@ -27,10 +29,10 @@ const characterSchema = new mongoose.Schema(
         trim: true,
     },
     relationships: [
-    {
+        {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Character',
-    },
+        },
     ],
     createdAt: {
         type: Date,
