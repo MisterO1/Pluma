@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-exports.protect = async (req, res, next) => {
+const protect = async (req, res, next) => {
     let token;
     if (
         req.headers.authorization &&
@@ -12,12 +12,12 @@ exports.protect = async (req, res, next) => {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             req.user = await User.findById(decoded.id).select('-password');
             next();
-        } catch (err) {
-            res.status(401).json({ message: 'Token invalide' });
+        } catch (error) {
+            res.status(401).json({ message: 'Non autorisé, token invalide' });
         }
-    }
-
-    if (!token) {
-        res.status(401).json({ message: 'Non autorisé, token manquant' });
+    } else {
+        res.status(401).json({ message: 'Non autorisé, aucun token' });
     }
 };
+
+module.exports = protect;

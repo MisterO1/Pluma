@@ -116,3 +116,10 @@ main {
         transform: translateY(0);
     }
 }
+
+form {
+    display: none;
+}
+form.active {
+    display: block;
+}

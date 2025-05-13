@@ -10,7 +10,7 @@
 <body>
     <header>
         <h1 class="greeting" >Bienvenue</h1>
-        <button id="open-modal" class="btn-primary">➕ Créer un projet</button>
+        <button id="createProjectBtn" class="btn-primary">➕ Créer un projet</button>
         <button id="logout-btn" class="logout-button">Se déconnecter</button>
     </header>
 
@@ -21,17 +21,30 @@
     <div class="modal-overlay"></div>
     <div class="modal" id="project-modal">
         <div class="modal-content">
-        <button class="close-modal">&times;</button>
-        <h3>Nouveau projet</h3>
-        <form id="project-form">
-            <label for="title">Titre du projet :</label>
-            <input type="text" id="title" name="title" placeholder="titre du projet" required />
+            <button class="close-modal">&times;</button>
+            <form id="create-form">
+                <h2>Créer un projet</h2>
+                <label for="title">Titre du projet :</label>
+                <input type="text" name="title" id="title" placeholder="Titre du projet" required />
 
-            <label for="description">Description :</label>
-            <textarea id="description" name="description" placeholder="description du projet" required></textarea>
+                <label for="description" >Description :</label>
+                <textarea name="description" id="description" placeholder="Description du projet" required></textarea>
 
-            <button type="submit">Créer</button>
-        </form>
+                <button type="submit">Créer</button>
+            </form>
+            <form id="edit-form">
+                <h2>Modifier le projet</h2>
+
+                <label for="title">Titre du projet :</label>
+                <input type="text" name="title" id="title" placeholder="Nouveau titre" required />
+
+                <label for="description">Description :</label>
+                <textarea name="description" id="description" placeholder="Nouvelle description" required></textarea>
+
+                <input type="hidden" name="projectId" />
+                <button type="submit">Mettre à jour</button>
+            </form>
+
         </div>
     </div>
 </body>

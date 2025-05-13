@@ -14,27 +14,31 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector(".greeting").textContent = `Bienvenue ${username}`
     }
         
-    const form = document.getElementById("project-form");
+    const createForm = document.getElementById("create-form");
+    const editForm = document.getElementById("edit-form");
     const modal = document.getElementById("project-modal");
     const modalOverlay = document.querySelector(".modal-overlay");
     const projectsContainer = document.getElementById("projects-container");
-    const openModalBtn = document.getElementById("open-modal");
+    const createProjectBtn = document.getElementById("createProjectBtn");
     const closeModalBtn = document.querySelector(".close-modal");
 
-    // === Ouvrir la modale ===
-    openModalBtn.addEventListener("click", () => {
+    // === Ouvrir la modale  ===
+    createProjectBtn.addEventListener("click", () => {
         modal.classList.add("open");
         modalOverlay.classList.add("active");
+        createForm.classList.add("active")
     });
-
+    
     // === Fermer la modale ===
     closeModalBtn.addEventListener("click", () => {
         modal.classList.remove("open");
         modalOverlay.classList.remove("active");
+        createForm.classList.remove("active")
+        editForm.classList.remove("active")
     });
 
-    // === Soumission du formulaire ===
-    form.addEventListener("submit", async (e) => {
+    // === Soumission du formulaire CREATE PROJECT ===
+    createForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         const title = form.title.value.trim();
@@ -44,24 +48,54 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const response = await fetch(baseUrl+"/api/projects", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
                 body: JSON.stringify({ title, description }),
             });
 
             if (!response.ok) throw new Error("Erreur lors de la création du projet");
             const newProject = await response.json();
-            console.log(newProject)
+            // console.log(newProject)
 
             displayProject(newProject, true); // Ajoute avec animation
-            console.log("displayed")
 
-            form.reset(); // Réinitialiser le formulaire
-            form.onsubmit = null;
-            modal.classList.remove("open");
-            modalOverlay.classList.remove("active");
+            e.target.reset(); // Réinitialiser le formulaire
+            closeModalBtn.click() // close
 
         } catch (error) {
         console.error(error);
+        }
+    });
+
+    // === Soumission du formulaire EDIT PROJECT ===
+    editForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const title = e.target.title.value.trim();
+        const description = e.target.description.value.trim();
+        const projectId = e.target.projectId.value
+
+        try {
+            const response = await fetch(baseUrl + `/api/projects/${projectId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
+            body: JSON.stringify({ title, description }),
+            });
+
+            if (!response.ok) throw new Error("Échec de la mise à jour");
+
+            const updatedProject = await response.json();
+            // displayProject(updatedProject);
+            loadProjects()
+            e.target.reset();
+            closeModalBtn.click() // close modal just after
+        } catch (err) {
+            console.error(err.message);
         }
     });
 
@@ -70,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const response = await fetch(baseUrl+"/api/projects");
             const projects = await response.json();
+            document.getElementById("projects-container").innerHTML = ""
             projects.reverse().forEach(project => displayProject(project));
         } catch (error) {
             console.error("Erreur lors du chargement des projets :", error);
@@ -92,41 +127,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const editBtn = card.querySelector(".edit-btn");
         const deleteBtn = card.querySelector(".delete-btn");
-        editBtn.addEventListener("click", () => openEditModal(project));
+        editBtn.addEventListener("click", () => editProject(project));
         deleteBtn.addEventListener("click", () => deleteProject(project._id, card));
 
     }
 
     loadProjects(); // Initialiser le chargement
 
-    function openEditModal(project) {
-        form.title.value = project.title;
-        form.description.value = project.description;
+    function editProject(project) {
+        editForm.title.value = project.title;
+        editForm.description.value = project.description;
+        editForm.projectId.value = project._id
 
+        // open the edition form
         modal.classList.add("open");
         modalOverlay.classList.add("active");
-
-        form.onsubmit = async (e) => {
-            e.preventDefault();
-            const updatedTitle = form.title.value.trim();
-            const updatedDesc = form.description.value.trim();
-
-            try {
-            const res = await fetch(`${baseUrl}/api/projects/${project._id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ title: updatedTitle, description: updatedDesc }),
-            });
-            if (!res.ok) throw new Error("Erreur modification");
-
-            modal.classList.remove("open");
-            modalOverlay.classList.remove("active");
-            location.reload(); // Pour simplifier. Optionnel : mettre à jour sans reload
-            } catch (err) {
-            console.error(err);
-            }
-        };
-    }
+        editForm.classList.add("active")
+    };
 
     async function deleteProject(id, cardElement) {
         const confirmDelete = confirm("Supprimer ce projet ?");
@@ -136,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const res = await fetch(`${baseUrl}/api/projects/${id}`, { method: "DELETE" });
             if (!res.ok) throw new Error("Erreur suppression");
 
-            cardElement.remove(); // Retire du DOM
+            cardElement.remove(); // delete from the DOM
         } catch (err) {
             console.error(err);
         }

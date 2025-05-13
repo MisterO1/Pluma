@@ -3,7 +3,7 @@ const Project = require('../models/Project');
 // Créer un projet
 exports.createProject = async (req, res) => {
     try {
-        const project = await Project.create(req.body);
+        const project = await Project.create({...req.body, author: req.user._id});
         res.status(201).json(project);
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -34,7 +34,7 @@ exports.getProjectById = async (req, res) => {
 // Mettre à jour un projet
 exports.updateProject = async (req, res) => {
     try {
-        const project = await Project.findByIdAndUpdate(req.params.id, req.body, {
+        const project = await Project.findByIdAndUpdate(req.params.id, {...req.body, author: req.user._id}, {
         new: true,
         });
         if (!project) return res.status(404).json({ message: 'Projet non trouvé' });
