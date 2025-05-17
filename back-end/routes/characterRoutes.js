@@ -1,5 +1,7 @@
 const express = require('express');
+const protect = require('../middleware/authMiddleware')
 const router = express.Router();
+
 const {
     createCharacter,
     getAllCharacters,
@@ -9,10 +11,10 @@ const {
 } = require('../controllers/characterController');
 
 // CRUD des personnages
-router.post('/', createCharacter);
+router.post('/', protect, createCharacter);
 router.get('/', getAllCharacters);
 router.get('/:id', getCharacterById);
-router.put('/:id', updateCharacter);
-router.delete('/:id', deleteCharacter);
+router.put('/:id', protect, updateCharacter);
+router.delete('/:id', protect, deleteCharacter);
 
 module.exports = router;

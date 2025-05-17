@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 require('./Project')
 
-const peopleSchema = new mongoose.Schema({
+const groupSchema = new mongoose.Schema({
   project: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Project',
@@ -13,4 +13,4 @@ const peopleSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('People', peopleSchema);
+module.exports = mongoose.model('People', groupSchema);

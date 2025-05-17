@@ -9,8 +9,9 @@ app.use(express.json()); // pour parser le JSON
 // Routes
 const userRoutes = require('./routes/userRoutes');
 const projectRoutes = require('./routes/projectRoutes');
+const characterRoutes = require('./routes/characterRoutes');
 const sceneRoutes = require('./routes/sceneRoutes');
-const peopleRoutes = require('./routes/peopleRoutes');
+const groupRoutes = require('./routes/groupRoutes');
 const powersystemRoutes = require('./routes/powersystemRoutes');
 const timelineRoutes = require('./routes/timelineRoutes');
 
@@ -22,8 +23,9 @@ app.get('/', (req, res) => {
 // Utilisation des routes
 app.use('/api/users', userRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/characters', characterRoutes);
 app.use('/api/scenes', sceneRoutes);
-app.use('/api/peoples', peopleRoutes);
+app.use('/api/group', groupRoutes);
 app.use('/api/powersystem', powersystemRoutes);
 app.use('/api/timeline', timelineRoutes);
 

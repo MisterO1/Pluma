@@ -1,9 +1,17 @@
 const Character = require('../models/Character');
+const Project = require('../models/Project');
 
 // Créer un personnage
 exports.createCharacter = async (req, res) => {
     try {
-        const character = await Character.create(req.body);
+        const { name, age, role, biography, imageUrl, project } = req.body;
+        const character = await Character.create({...req.body, author: req.user._id});
+
+        // Ajoute le personnage au projet
+        await Project.findByIdAndUpdate(project, {
+            $push: { characters: character._id }
+        });
+
         res.status(201).json(character);
     } catch (err) {
         res.status(400).json({ message: err.message });

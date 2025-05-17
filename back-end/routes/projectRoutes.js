@@ -4,6 +4,7 @@ const router = express.Router();
 const {
     createProject,
     getAllProjects,
+    getProjectsByUser,
     getProjectById,
     updateProject,
     deleteProject,
@@ -11,7 +12,7 @@ const {
 
 // CRUD
 router.post('/',protect, createProject);
-router.get('/', getAllProjects);
+router.get('/',protect, getProjectsByUser);
 router.get('/:id', getProjectById);
 router.put('/:id', protect, updateProject);
 router.delete('/:id', deleteProject);

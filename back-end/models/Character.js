@@ -3,45 +3,47 @@ const mongoose = require('mongoose');
 require('./Project')
 
 const characterSchema = new mongoose.Schema(
-{
-    name: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    role: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    biography: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    project: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Project',
-        required: true,
-    },
-    appearance: {
-        type: String,
-        trim: true,
-    },
-    relationships: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Character',
+    {
+        name: {
+            type: String,
+            required: true,
+            trim: true,
         },
-    ],
-    createdAt: {
-        type: Date,
-        default: Date.now,
+        age: {
+            type: Number,
+            min: 0
+        },
+        role: {
+            type: String,
+            trim: true,
+        },
+        biography: {
+            type: String,
+            trim: true,
+        },
+        project: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Project',
+            required: true,
+        },
+        imageUrl: {
+            type: String,
+            trim: true,
+            default: "../front-end/assets/default.avif",
+        },
+        author: {
+            type: mongoose.Schema.Types.ObjectId,
+            trim: true,
+            required: true,
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now,
+        },
     },
-},
-{ 
-    timestamps: true
-}
+    { 
+        timestamps: true
+    }
 );
 
 const Character = mongoose.model('Character', characterSchema);

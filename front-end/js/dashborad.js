@@ -4,9 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // redirection if not logged on
     const token = localStorage.getItem("token");
-        if (!token) {
-            window.location.href = "./login.html";
-        }
+    if (!token) {
+        window.location.href = "./login.html";
+    }
     
     // greet the user
     username = localStorage.getItem("username")
@@ -41,8 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
     createForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const title = form.title.value.trim();
-        const description = form.description.value.trim();
+        const title = createForm.title.value.trim();
+        const description = createForm.description.value.trim();
         if (!title || !description) return;
 
         try {
@@ -57,7 +57,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!response.ok) throw new Error("Erreur lors de la création du projet");
             const newProject = await response.json();
-            // console.log(newProject)
 
             displayProject(newProject, true); // Ajoute avec animation
 
@@ -102,7 +101,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // === Charger tous les projets au démarrage ===
     async function loadProjects() {
         try {
-            const response = await fetch(baseUrl+"/api/projects");
+            const response = await fetch(
+                baseUrl+"/api/projects",
+                {   
+                    method : "GET",
+                    headers : {
+                        "Authorization" : "Bearer "+ token
+                    }
+                }
+            );
             const projects = await response.json();
             document.getElementById("projects-container").innerHTML = ""
             projects.reverse().forEach(project => displayProject(project));
@@ -121,15 +128,17 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="project-actions">
                 <button class="edit-btn" data-id="${project._id}">Modifier</button>
                 <button class="delete-btn" data-id="${project._id}">Supprimer</button>
+                <button class="details-btn" data-id="${project._id}">Details</button>
             </div>
             `;
         projectsContainer.prepend(card);
 
         const editBtn = card.querySelector(".edit-btn");
         const deleteBtn = card.querySelector(".delete-btn");
+        const detailsBtn = card.querySelector(".details-btn");
         editBtn.addEventListener("click", () => editProject(project));
         deleteBtn.addEventListener("click", () => deleteProject(project._id, card));
-
+        detailsBtn.addEventListener("click", () => detailsProject(project._id));
     }
 
     loadProjects(); // Initialiser le chargement
@@ -157,6 +166,11 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (err) {
             console.error(err);
         }
+    }
+
+    function detailsProject (id) {
+        localStorage.setItem("projectId",id)
+        window.location.href = "./project.html"
     }
 
     document.getElementById("logout-btn").addEventListener("click", () => {

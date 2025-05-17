@@ -20,7 +20,18 @@ exports.getAllProjects = async (req, res) => {
     }
 };
 
-// Lire un projet par ID
+// lire que les projets d'un utilisateur
+exports.getProjectsByUser = async (req, res) => {
+    try {
+        const projects = await Project.find({ author: req.user.id }).populate('characters');
+        if (!projects) return res.status(404).json({ message: 'Projets non trouvé' });
+        res.status(200).json(projects);
+    } catch(err) {
+        res.status(500).json({ message: err.message});
+    }
+}
+
+// Lire un projet par ID du projet
 exports.getProjectById = async (req, res) => {
     try {
         const project = await Project.findById(req.params.id).populate('author characters');
@@ -30,6 +41,7 @@ exports.getProjectById = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
 
 // Mettre à jour un projet
 exports.updateProject = async (req, res) => {
