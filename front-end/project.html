@@ -27,6 +27,7 @@
       <button id="openCharacterModal" class="btn-primary">➕ Ajouter un personnage</button>
       <div id="character-list" class="card-container">Aucun personnage pour l'instant</div>
     </div>
+    <!-- CREATE A CHARACTER -->
     <div id="characterModalOverlay" class="modal-overlay"></div>
     <div id="characterModal" class="modal">
       <form id="characterForm" autocomplete="on">
@@ -38,6 +39,22 @@
         <input type="url" name="imageUrl" placeholder="URL de l'image (facultatif)" />
         <button type="submit">Créer</button>
         <button type="button" id="closeCharacterModal">Annuler</button>
+      </form>
+    </div>
+    <!-- EDIT A CHARACTER -->
+    <div id="editCharacterModalOverlay" class="modal-overlay"></div>
+    <div id="editCharacterModal" class="modal">
+      <form id="editCharacterForm">
+        <h2>Modifier le personnage</h2>
+        <input type="text" name="name" placeholder="Nom" required />
+        <input type="number" name="age" placeholder="Âge" />
+        <input type="text" name="role" placeholder="Rôle" />
+        <textarea name="biography" placeholder="Histoire"></textarea>
+        <input type="url" name="imageUrl" placeholder="URL de l'image" />
+
+        <input type="hidden" name="id" />
+        <button type="submit">Enregistrer</button>
+        <button type="button" id="closeEditCharacterModal">Annuler</button>
       </form>
     </div>
 

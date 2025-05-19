@@ -4,7 +4,7 @@ const router = express.Router();
 
 const {
     createCharacter,
-    getAllCharacters,
+    getAllCharactersFromProject,
     getCharacterById,
     updateCharacter,
     deleteCharacter,
@@ -12,7 +12,7 @@ const {
 
 // CRUD des personnages
 router.post('/', protect, createCharacter);
-router.get('/', getAllCharacters);
+router.get('/', protect, getAllCharactersFromProject);
 router.get('/:id', getCharacterById);
 router.put('/:id', protect, updateCharacter);
 router.delete('/:id', protect, deleteCharacter);
