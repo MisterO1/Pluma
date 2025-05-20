@@ -5,6 +5,11 @@ if (!token) {
 }
 const baseUrl = "http://localhost:5000"
 
+document.getElementById("Back").addEventListener("click",()=>{
+    localStorage.removeItem("projectId")
+    window.location.href = "dashboard.html"
+})
+
 // GET THE PROJECT
 const projectId = localStorage.getItem("projectId")
 if (!projectId) {   console.log("!!! projectId not present in localStorage !!!")  }
@@ -22,8 +27,7 @@ async function lastProjectState() {
         if (!response.ok) throw new Error("Erreur lors de la recuperation du projet");
         return response.json()
     } catch (err) {
-        response.status(400).json({ message: err.message });
-        return
+        console.error(err);
     }
 }
 
@@ -37,7 +41,12 @@ document.getElementById("project-title").textContent = `Projet : ${project.title
 // DISPLAY CHARACTERS FROM THAT PROJECTS
 function displayCharacters(characters) {
     const characterList = document.getElementById("character-list");
-    characterList.innerHTML = '';
+    characterList.innerHTML = ''
+
+    if (!characters.length) {
+        characterList.innerText = "Aucun personnage pour l'instant !"
+        return
+    }
 
     characters.forEach(char => {
         const card = document.createElement("div");
@@ -62,11 +71,7 @@ function displayCharacters(characters) {
         card.querySelector(".delete-btn").addEventListener("click", () => deleteCharacter(char))
     });
 }
-if (project.characters.length) { 
-    displayCharacters(project.characters)
-}else {
-    document.getElementById("character-list").textContent = "Aucun personnage pour l'instant !"
-}
+displayCharacters(characters)
 
 // -------------    CREATE A CHARACTER  --------------------- //
 
@@ -95,10 +100,13 @@ characterForm.addEventListener("submit", async (e) => {
     const data = {
         name: formData.get("name"),
         age: formData.get("age"),
+        sex: "M",
         role: formData.get("role"),
         biography: formData.get("biography"),
         imageUrl: formData.get("imageUrl"), // to change after
         project: projectId,
+        nature: "Human",
+        // group: 
     };
 
     try {
@@ -109,9 +117,10 @@ characterForm.addEventListener("submit", async (e) => {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             },
             body: JSON.stringify(data)
-        });
-
+        })
+        console.log(response)
         if (!response.ok) throw new Error("Erreur lors de la création du personnage");
+        
 
         // const newChar = await response.json();
         project = await lastProjectState() // update locally project with the updatedCharacter
