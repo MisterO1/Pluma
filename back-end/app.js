@@ -1,10 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const errorMiddleware = require ('./middleware/errorMiddleware')
 
 // Middlewares
 app.use(cors());
 app.use(express.json()); // pour parser le JSON
+app.use(express.urlencoded({ extended : false}))
+app.use(errorMiddleware)
 
 // Routes
 const userRoutes = require('./routes/userRoutes');
@@ -14,6 +17,7 @@ const sceneRoutes = require('./routes/sceneRoutes');
 const groupRoutes = require('./routes/groupRoutes');
 const powersystemRoutes = require('./routes/powersystemRoutes');
 const timelineRoutes = require('./routes/timelineRoutes');
+
 
 // Route de base pour tester que l'API fonctionne
 app.get('/', (req, res) => {
