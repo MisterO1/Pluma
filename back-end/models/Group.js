@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 require('./Project')
+require('./Character')
 
 const groupSchema = new mongoose.Schema({
   project: {
@@ -8,9 +9,26 @@ const groupSchema = new mongoose.Schema({
     ref: 'Project',
     required: true,
   },
-  title: { type: String, required: true },
-  summary: { type: String, default: '' },
-  createdAt: { type: Date, default: Date.now }
+  title: { 
+    type: String,
+    required: true,
+  },
+  summary: { 
+    type: String,
+    default: '',
+    },
+  type: { 
+    type: String, 
+    default: 'Project\'s Universe',
+  },
+  characters: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref : 'Character',
+  }],
+  createdAt: { 
+    type: Date, 
+    default: Date.now
+  }
 });
 
-module.exports = mongoose.model('People', groupSchema);
+module.exports = mongoose.model('Group', groupSchema);
