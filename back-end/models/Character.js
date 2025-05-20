@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
 require('./Project')
+require('./User')
+require('./Group')
 
 const characterSchema = new mongoose.Schema(
     {
@@ -9,9 +11,19 @@ const characterSchema = new mongoose.Schema(
             required: true,
             trim: true,
         },
+        nature: {
+            type: String,
+            trim: true,
+            default: "Human",
+        },
         age: {
             type: Number,
-            min: 0
+            min: 0,
+        },
+        sex: {
+            type: String,
+            enum : ["M","F","A"],
+            default: "M",
         },
         role: {
             type: String,
@@ -35,6 +47,12 @@ const characterSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             trim: true,
             required: true,
+        },
+        group: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Group',
+            trim: true,
+            // required: true,
         },
         createdAt: {
             type: Date,

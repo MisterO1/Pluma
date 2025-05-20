@@ -4,11 +4,11 @@ const Project = require('../models/Project');
 // create a character
 exports.createCharacter = async (req, res) => {
     try {
-        const { name, age, role, biography, imageUrl, project } = req.body;
+        const projectId = req.body.project;
         const character = await Character.create({...req.body, author: req.user._id});
 
         // Ajoute le personnage au projet
-        await Project.findByIdAndUpdate(project, {
+        await Project.findByIdAndUpdate(projectId, {
             $push: { characters: character._id }
         });
 
@@ -43,10 +43,16 @@ exports.getCharacterById = async (req, res) => {
 // Update a character by his ID
 exports.updateCharacter = async (req, res) => {
     try {
-        const character = await Character.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        });
+        let character = await Character.findById(req.params.id)
         if (!character) return res.status(404).json({ message: 'Character not found' });
+
+        const project = await Project.findById(character.project);
+        if (!project) return res.status(404).json({ message: 'Project of character not found' });
+
+        if (project.author.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: "Unauthorised to update that character" });
+        }
+        character = await Character.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.status(200).json(character);
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -56,8 +62,16 @@ exports.updateCharacter = async (req, res) => {
 // Delete a specific character by his ID
 exports.deleteCharacter = async (req, res) => {
     try {
-        const character = await Character.findByIdAndDelete(req.params.id);
+        const character = await Character.findById(req.params.id);
         if (!character) return res.status(404).json({ message: 'Character not found' });
+
+        const project = await Project.findById(character.project);
+        if (!project) return res.status(404).json({ message: 'Project of character not found' });
+
+        if (project.author.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: "Unauthorised to delete that character" });
+        }
+
         res.status(200).json({ message: 'Character deteled' });
     } catch (err) {
         res.status(500).json({ message: err.message });
