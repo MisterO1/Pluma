@@ -1,3 +1,5 @@
+const baseUrl = "http://localhost:5000"
+
 const loginTab = document.getElementById("login-tab");
 const signupTab = document.getElementById("signup-tab");
 const loginForm = document.getElementById("login-form");
@@ -23,7 +25,7 @@ loginForm.addEventListener("submit", async (e) => {
     const password = document.getElementById("login-password").value;
 
     try {
-    const res = await fetch("http://localhost:5000/api/users/login", {
+    const res = await fetch(`${baseUrl}/api/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -50,7 +52,7 @@ signupForm.addEventListener("submit", async (e) => {
     const password = document.getElementById("signup-password").value;
 
     try {
-    const res = await fetch("http://localhost:5000/api/users/register", {
+    const res = await fetch(`${baseUrl}/api/users/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),

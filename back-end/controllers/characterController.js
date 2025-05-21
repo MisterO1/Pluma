@@ -62,15 +62,31 @@ exports.updateCharacter = async (req, res) => {
 // Delete a specific character by his ID
 exports.deleteCharacter = async (req, res) => {
     try {
-        const character = await Character.findById(req.params.id);
+        let character = await Character.findById(req.params.id);
         if (!character) return res.status(404).json({ message: 'Character not found' });
 
+        // Get the project of the character
         const project = await Project.findById(character.project);
         if (!project) return res.status(404).json({ message: 'Project of character not found' });
 
+        // Only the author can delete a character
         if (project.author.toString() !== req.user._id.toString()) {
             return res.status(403).json({ message: "Unauthorised to delete that character" });
         }
+        // Remove character from the Character table
+        character = await Character.findByIdAndDelete(req.params.id);
+
+        // Remove character from the Project table
+        await Project.updateMany(
+            { characters : req.params.id},
+            { $pull: {characters : req.params.id}}
+        )
+
+        // Remove character from the Group table
+        // await Group.updateMany(
+        //     { members : req.params.id},
+        //     { $pull: { members : req.params.id }}
+        // )
 
         res.status(200).json({ message: 'Character deteled' });
     } catch (err) {

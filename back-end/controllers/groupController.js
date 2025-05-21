@@ -1,52 +1,51 @@
 const Group = require('../models/Group');
 
-// Créer un Groupe
+// Create a group
 exports.createGroup = async (req, res) => {
   try {
-    const item = new Group(req.body);
-    const saved = await item.save();
-    res.status(201).json(saved);
+    const group = await Group.create({ ...req.body, author: req.user._id });
+    res.status(201).json(group);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 };
 
-// Obtenir tous les Groupes d’un projet
+// Get all groups of a project
 exports.getGroupsByProject = async (req, res) => {
   try {
-    const items = await Group.find({ project: req.params.projectId });
-    res.json(items);
+    const groups = await Group.find({ project: req.params.projectId }).populate('members');
+    res.status(200).json(groups);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// Obtenir un Group par ID
+// Get a single group by ID
 exports.getGroupById = async (req, res) => {
   try {
-    const item = await Group.findById(req.params.id);
-    if (!item) return res.status(404).json({ message: 'Group not found' });
-    res.json(item);
+    const group = await Group.findById(req.params.id).populate('members');
+    if (!group) return res.status(404).json({ message: 'Group not found' });
+    res.status(200).json(group);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// Modifier
+// Update a group
 exports.updateGroup = async (req, res) => {
   try {
     const updated = await Group.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(updated);
+    res.status(200).json(updated);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 };
 
-// Supprimer
+// Delete a group
 exports.deleteGroup = async (req, res) => {
   try {
     await Group.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Groupe deleted' });
+    res.status(204).end();
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

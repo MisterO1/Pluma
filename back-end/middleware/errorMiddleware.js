@@ -1,4 +1,12 @@
-const errorMiddleware = (err, req, res, next) => {
+// Middleware pour les routes non trouvées
+// const notFound = (req, res, next) => {
+//     const error = new Error(`Not Found - ${req.originalUrl}`);
+//     res.status(404);
+//     next(error);
+// };
+
+// Middleware général de gestion d'erreurs
+const errorHandler = (err, req, res, next) => {
     try {
         let error = {...err}
         error.message = err.message
@@ -23,10 +31,16 @@ const errorMiddleware = (err, req, res, next) => {
             error.statusCode = 400
         }
 
-        res.status(error.statusCode || 500).json({ success: false, error: error.message || 'Server Error'})
+        res.status(error.statusCode || 500)
+        // Differentiate dev and prod
+        res.json({
+            success: false,
+            error: error.message || "Server Error",
+            ...(process.env.NODE_ENV !== "production" && { stack: error.stack })
+        });
     } catch (error) {
         next(error)
     }
 }
 
-module.exports = errorMiddleware
+module.exports = {  errorHandler }

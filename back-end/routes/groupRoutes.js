@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const protect = require('../middleware/authMiddleware');
 const {
   createGroup,
   getGroupsByProject,
@@ -8,10 +9,11 @@ const {
   deleteGroup
 } = require('../controllers/groupController');
 
-router.post('/', createGroup);
-router.get('/project/:projectId', getGroupsByProject);
-router.get('/:id', getGroupById);
-router.put('/:id', updateGroup);
-router.delete('/:id', deleteGroup);
+// All routes are protected
+router.post('/', protect, createGroup);
+router.get('/project/:projectId', protect, getGroupsByProject);
+router.get('/:id', protect, getGroupById);
+router.put('/:id', protect, updateGroup);
+router.delete('/:id', protect, deleteGroup);
 
 module.exports = router;

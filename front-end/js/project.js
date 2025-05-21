@@ -32,11 +32,37 @@ async function lastProjectState() {
 }
 
 let project = await lastProjectState();// use "let" because project will be updated after each user's modification
-// console.log(project)
 let characters = project.characters
 
 // WRITE THE PROJECT TITLE
 document.getElementById("project-title").textContent = `Projet : ${project.title}`
+
+// ------------- ALL FORMS -------------
+const createCharacterForm = document.getElementById("createCharacterForm");
+const editCharacterForm = document.getElementById("editCharacterForm");
+const createGroupForm = document.getElementById("createGroupForm");
+
+// ------------- MODAL -------------
+const modalOverlay = document.getElementById("modalOverlay");
+
+function openForm(form) {
+    modalOverlay.classList.add("active");
+    form.classList.add("active");
+}
+
+function closeForm(form) {
+    modalOverlay.classList.remove("active");
+    form.classList.remove("active");
+}
+
+document.querySelectorAll(".modal-close-btn").forEach((closeBtn) => {
+    closeBtn.addEventListener("click", (e)=>{ 
+        const form = e.target.parentElement
+        closeForm(form)
+    })
+})
+
+//// ------------------------------    CHARACTER  ----------------------------------- ////
 
 // DISPLAY CHARACTERS FROM THAT PROJECTS
 function displayCharacters(characters) {
@@ -75,38 +101,22 @@ displayCharacters(characters)
 
 // -------------    CREATE A CHARACTER  --------------------- //
 
-// DISPLAY MODALS TO CREATE A CHARACTER
-const openModalBtn = document.getElementById("openCharacterModal");
-const closeModalBtn = document.getElementById("closeCharacterModal");
-const modal = document.getElementById("characterModal");
-const modalOverlay = document.getElementById("characterModalOverlay");
-
-openModalBtn.addEventListener("click", () => {
-    modal.classList.add("open");
-    modalOverlay.classList.add("active");
-});
-
-closeModalBtn.addEventListener("click", () => {
-    modal.classList.remove("open");
-    modalOverlay.classList.remove("active");
-});
-
+document.getElementById("openCharacterForm").addEventListener("click",()=>{openForm(createCharacterForm)})
 // SUBMIT
-const characterForm = document.getElementById("characterForm");
-characterForm.addEventListener("submit", async (e) => {
+createCharacterForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(characterForm);
+    const formData = new FormData(e.target);
     const data = {
         name: formData.get("name"),
+        type: formData.get("type"),
         age: formData.get("age"),
-        sex: "M",
+        sex: formData.get("sex"),
         role: formData.get("role"),
         biography: formData.get("biography"),
         imageUrl: formData.get("imageUrl"), // to change after
         project: projectId,
-        nature: "Human",
-        // group: 
+        // groups: 
     };
 
     try {
@@ -114,71 +124,66 @@ characterForm.addEventListener("submit", async (e) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(data)
         })
-        console.log(response)
-        if (!response.ok) throw new Error("Erreur lors de la création du personnage");
-        
+        // Handle bad request with detailed message
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || errorData.message || "Une erreur est survenue");
+        }
+        const createdCharacter = await response.json();
+        // console.log("Personnage créé avec succès :", createdCharacter)
 
-        // const newChar = await response.json();
         project = await lastProjectState() // update locally project with the updatedCharacter
         characters = project.characters
         displayCharacters(characters); // Mets à jour l’affichage
 
-        characterForm.reset();
-        modal.classList.remove("open");
-        modalOverlay.classList.remove("active");
+        e.target.reset();
+        closeForm(e.target)
 
     } catch (err) {
-        console.error(err);
+        console.error("Erreur lors de la création du personnage :", err.message);
     }
 });
 
 
 // -------------    EDIT A CHARACTER  --------------------- //
 
-// DISPLAY MODALS TO EDIT A CHARACTER
-const editCharacterModal = document.getElementById("editCharacterModal");
-const editCharacterModalOverlay = document.getElementById("editCharacterModalOverlay");
-const editCharacterForm = document.getElementById("editCharacterForm");
-const closeEditCharacterModal = document.getElementById("closeEditCharacterModal");
-
-// Fermer la modale
-closeEditCharacterModal.addEventListener("click", () => {
-    editCharacterModal.classList.remove("open");
-    editCharacterModalOverlay.classList.remove("active");
-});
-
 // Préremplir et ouvrir la modale
 function openEditCharacterModal(character) {
-    editCharacterForm.name.value = character.name;
-    editCharacterForm.age.value = character.age;
-    editCharacterForm.role.value = character.role;
-    editCharacterForm.biography.value = character.biography;
-    editCharacterForm.imageUrl.value = character.imageUrl;
-    editCharacterForm.id.value = character._id;
+    const form = editCharacterForm;
+    form.name.value = character.name;
+    form.type.value = character.type;
+    form.age.value = character.age;
+    form.sex.value = character.sex;
+    form.role.value = character.role;
+    form.biography.value = character.biography;
+    form.imageUrl.value = character.imageUrl;
+    form.characterId.value = character._id;
 
-    editCharacterModal.classList.add("open");
-    editCharacterModalOverlay.classList.add("active");
+    openForm(form)
 }
 
 // SUBMIT
 editCharacterForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const id = editCharacterForm.id.value;
+    const form = e.target;
+    const characterId = form.characterId.value;
     const updatedData = {
-        name: editCharacterForm.name.value,
-        age: editCharacterForm.age.value,
-        role: editCharacterForm.role.value,
-        biography: editCharacterForm.biography.value,
-        imageUrl: editCharacterForm.imageUrl.value,
+        name: form.name.value,
+        type: form.type.value,
+        age: form.age.value,
+        sex: form.sex.value,
+        role: form.role.value,
+        biography: form.biography.value,
+        imageUrl: form.imageUrl.value,
     };
 
     try {
-        const response = await fetch(`${baseUrl}/api/characters/${id}`, {
+        const response = await fetch(`${baseUrl}/api/characters/${characterId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -189,9 +194,9 @@ editCharacterForm.addEventListener("submit", async (e) => {
 
         if (!response.ok) throw new Error("Erreur lors de la modification");
 
-        const updatedCharacter = await response.json();
         project = await lastProjectState() // update locally project with the updatedCharacter
         characters = project.characters
+        // const updatedCharacter = await response.json();
         // update characters
         // characters = characters.map((char) =>
         //     char._id === updatedCharacter._id ? updatedCharacter : char
@@ -199,8 +204,7 @@ editCharacterForm.addEventListener("submit", async (e) => {
 
         displayCharacters(characters); // Réaffiche les cards avec les données à jour
 
-        editCharacterModal.classList.remove("open");
-        editCharacterModalOverlay.classList.remove("active");
+        closeForm(form)
 
     } catch (err) {
         console.error(err);
@@ -211,23 +215,124 @@ editCharacterForm.addEventListener("submit", async (e) => {
 // -------------    DELETE A CHARACTER  --------------------- //
 
 async function deleteCharacter(char) {
-    if (confirm(`Etes vous sûr de supprimer le personnage "${char.name}" ?`)) {
-        try {
-            const response = await fetch(`${baseUrl}/api/characters/${char._id}`, {
-                method: "DELETE",
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
-            });
+    if (!confirm(`Etes vous sûr de supprimer le personnage "${char.name}" ?`)) {
+        return
+    }
+    try {
+        const response = await fetch(`${baseUrl}/api/characters/${char._id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
 
-            if (!response.ok) throw new Error("Erreur lors de la suppression");
+        if (!response.ok) throw new Error("Erreur lors de la suppression");
 
-            project = await lastProjectState()
-            characters = project.characters
-            displayCharacters(characters);
-        } catch (err) {
-            console.error("Erreur suppression :", err.message);
-        }
+        project = await lastProjectState()
+        characters = project.characters
+        // console.log(characters)
+        displayCharacters(characters);
+    } catch (err) {
+        console.error("Erreur suppression :", err.message);
     }
 }
+
+
+//// ------------------------------    GROUP  ----------------------------------- ////
+
+// -------------    CREATE A GROUP  --------------------- //
+
+const searchInput = document.getElementById("memberSearch");
+const searchResults = document.getElementById("searchResults");
+const memberList = document.getElementById("memberList");
+
+let selectedCharactersId = []
+
+searchInput.addEventListener("input", async () => {
+    const query = searchInput.value.trim().toLowerCase();
+    searchResults.innerHTML = "";
+
+    if (query.length < 2) return;
+
+    const matchingCharacters = characters.filter(c =>
+        c.name.toLowerCase().includes(query) &&
+        !selectedCharactersId.includes(c._id)
+    );
+
+    matchingCharacters.forEach(char => {
+        const li = document.createElement("li");
+        li.textContent = char.name;
+
+        li.addEventListener("click", () => {
+            if (!selectedCharactersId.includes(char._id)) {
+                selectedCharactersId.push(char._id);
+                console.log("selectedCharactersId+",selectedCharactersId)
+                const selectedLi = document.createElement("li");
+                selectedLi.textContent = char.name;
+
+                const removeBtn = document.createElement("button");
+                removeBtn.textContent = "❌";
+                removeBtn.addEventListener("click", () => {
+                    selectedCharactersId = selectedCharactersId.filter(id => id !== char._id);
+                    memberList.removeChild(selectedLi);
+                    console.log("selectedCharactersId-",selectedCharactersId)
+                });
+
+                selectedLi.appendChild(removeBtn);
+                memberList.appendChild(selectedLi);
+            }
+            searchInput.value = "";
+            searchResults.innerHTML = "";
+        });
+        searchResults.appendChild(li);
+    });
+});
+
+createGroupForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+    const name = form.name.value.trim();
+    const type = form.type.value;
+    if (!name || !type || selectedCharactersId.length === 0) {
+        alert("Nom, type, et au moins un membre sont requis.");
+        return;
+    }
+    const data = {
+        name: name,
+        type: type,
+        description: form.description.value.trim(),
+        members: selectedCharactersId,
+        project: projectId,
+    };
+
+    try {
+        const response = await fetch(`${baseUrl}/api/groups`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(data),
+        });
+
+        // Handle bad request with detailed message
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || errorData.message || "Une erreur est survenue");
+        }
+
+        const newGroup = await response.json();
+        console.log("Group created:", newGroup);
+
+        selectedCharactersId = [];
+        memberList.innerHTML = "";
+        closeForm(form);
+    } catch (err) {
+        console.error(err);
+    }
+})
+
+// -------------    EDIT A GROUP  --------------------- //
+document.getElementById("openGroupForm").addEventListener("click",()=>{openForm(createGroupForm)})
 

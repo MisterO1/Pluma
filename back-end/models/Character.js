@@ -11,10 +11,12 @@ const characterSchema = new mongoose.Schema(
             required: true,
             trim: true,
         },
-        nature: {
+        type: {
             type: String,
             trim: true,
-            default: "Human",
+            enum: ['human', 'object', 'animal', 'other'],
+            default: "human",
+            required: true,
         },
         age: {
             type: Number,
@@ -22,8 +24,9 @@ const characterSchema = new mongoose.Schema(
         },
         sex: {
             type: String,
-            enum : ["M","F","A"],
-            default: "M",
+            enum: ['male', 'female', 'none'],
+            default: "None",
+            required: true,
         },
         role: {
             type: String,
@@ -48,12 +51,12 @@ const characterSchema = new mongoose.Schema(
             trim: true,
             required: true,
         },
-        group: {
+        groups: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Group',
             trim: true,
             // required: true,
-        },
+        }],
         createdAt: {
             type: Date,
             default: Date.now,
@@ -63,6 +66,9 @@ const characterSchema = new mongoose.Schema(
         timestamps: true
     }
 );
+
+// name unique per project
+characterSchema.index({ name: 1, project: 1 }, { unique: true });
 
 const Character = mongoose.model('Character', characterSchema);
 

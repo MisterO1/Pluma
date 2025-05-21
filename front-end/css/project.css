@@ -66,40 +66,96 @@
     color: #555;
 }
 
-/* CHARACTERS MODAL */
+/* MODAL OVERLAY */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-    display: none;
-    z-index: 10;
-}
-
-.modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    display: none;
-    z-index: 11;
-    max-width: 400px;
-    width: 90%;
-}
-
-.modal.open,
-.modal-overlay.active {
-    display: block;
-}
-
-.modal form {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* fond noir semi-transparent */
     display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+/* Activer l’affichage du modal */
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Contenu du modal */
+.modal-content {
+    background-color: #ffffff;
+    padding: 2rem;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Bouton de fermeture (à insérer dans ton HTML si tu veux) */
+.modal-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    /* background: transparent; */
+    /* border: none; */
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.modal-content label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: bold;
+}
+
+.modal-content input,
+.modal-content textarea,
+.modal-content select {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+.modal-content button[type="submit"] {
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #2b6cb0;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.modal-content button[type="submit"]:hover {
+    background-color: #2c5282;
+}
+
+form {
+    display: none;
+}
+form.active {
+    display: block;
 }

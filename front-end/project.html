@@ -10,13 +10,13 @@
 <body>
   <header>
     <h1 id="project-title">Projet : Akane, l'héritier masqué</h1>
-    <a href="dashboard.html" class="btn-secondary">⬅ Retour</a>
+    <button id="Back" class="btn-secondary"> ⬅ Retour</button>
   </header>
 
   <main>
     <div class="tabs">
       <div class="tab active" data-tab="characters">👤 Personnages</div>
-      <div class="tab" data-tab="peuples">🌍 Peuples</div>
+      <div class="tab" data-tab="group">🌍 Groupes</div>
       <div class="tab" data-tab="scenes">⚔️ Scènes épiques</div>
       <div class="tab" data-tab="pouvoirs">🔮 Pouvoirs</div>
       <div class="tab" data-tab="chronologie">📅 Chronologie</div>
@@ -24,43 +24,97 @@
 
     <div id="characters" class="tab-content active">
       <h2>Personnages</h2>
-      <button id="openCharacterModal" class="btn-primary">➕ Ajouter un personnage</button>
+      <button id="openCharacterForm" class="btn-primary">➕ Ajouter un personnage</button>
       <div id="character-list" class="card-container">Aucun personnage pour l'instant</div>
     </div>
-    <!-- CREATE A CHARACTER -->
-    <div id="characterModalOverlay" class="modal-overlay"></div>
-    <div id="characterModal" class="modal">
-      <form id="characterForm" autocomplete="on">
-        <h2>Nouveau Personnage</h2>
-        <input type="text" name="name" placeholder="Nom" required />
-        <input type="number" name="age" placeholder="Âge" />
-        <input type="text" name="role" placeholder="Rôle (ex: héros, mentor...)" />
-        <textarea name="biography" placeholder="biography" style="resize: vertical;"></textarea>
-        <input type="url" name="imageUrl" placeholder="URL de l'image (facultatif)" />
-        <button type="submit">Créer</button>
-        <button type="button" id="closeCharacterModal">Annuler</button>
-      </form>
-    </div>
-    <!-- EDIT A CHARACTER -->
-    <div id="editCharacterModalOverlay" class="modal-overlay"></div>
-    <div id="editCharacterModal" class="modal">
-      <form id="editCharacterForm">
-        <h2>Modifier le personnage</h2>
-        <input type="text" name="name" placeholder="Nom" required />
-        <input type="number" name="age" placeholder="Âge" />
-        <input type="text" name="role" placeholder="Rôle" />
-        <textarea name="biography" placeholder="Histoire"></textarea>
-        <input type="url" name="imageUrl" placeholder="URL de l'image" />
+    <!-- MODAL -->
+    <div id="modalOverlay" class="modal-overlay">
+      <div class="modal-content" id="modalContent">
 
-        <input type="hidden" name="id" />
-        <button type="submit">Enregistrer</button>
-        <button type="button" id="closeEditCharacterModal">Annuler</button>
-      </form>
+        <!-- CREATE A CHARACTER -->
+        <form id="createCharacterForm" autocomplete="on">
+          <h2>Nouveau Personnage</h2>
+          <input type="text" name="name" placeholder="Nom" required />
+          <label>Type:
+            <select name="type" required>
+              <option value="human">Humain</option>
+              <option value="animal">Animal</option>
+              <option value="object">Objet</option>
+              <option value="other">Autre</option>
+            </select>
+          </label>
+          <input type="number" name="age" min=0 placeholder="Âge" />
+          <label>Sex:
+            <select name="sex" required>
+              <option value="male">Masculin</option>
+              <option value="female">feminin</option>
+              <option value="None">Non binaire</option>
+            </select>
+          </label>
+          <input type="text" name="role" placeholder="Rôle (ex: héros, mentor...)" />
+          <textarea name="biography" placeholder="biography" style="resize: vertical;"></textarea>
+          <input type="url" name="imageUrl" placeholder="URL de l'image (facultatif)" />
+          <button type="submit">Créer</button>
+          <button type="button" class="modal-close-btn">Annuler</button>
+        </form>
+
+        <!-- EDIT A CHARACTER -->
+        <form id="editCharacterForm">
+          <h2>Modifier le personnage</h2>
+          <input type="text" name="name" placeholder="Nom" required />
+          <input type="number" min=0 name="age" placeholder="Âge" />
+          <input type="text" name="role" placeholder="Rôle" />
+          <textarea name="biography" placeholder="Histoire"></textarea>
+          <input type="url" name="imageUrl" placeholder="URL de l'image" />
+          <input type="hidden" name="characterId" />
+          <button type="submit">Enregistrer</button>
+          <button type="button" class="modal-close-btn">Annuler</button>
+        </form>
+
+        <!-- CREATE A GROUP -->
+        <form id="createGroupForm">
+          <h2>Create Group</h2>
+          <label>Group Name:
+            <input type="text" name="name" required />
+          </label>
+
+          <label>Description:
+            <textarea name="description"></textarea>
+          </label>
+
+          <label>Type:
+            <select name="type" required>
+              <option value="nation">Nation</option>
+              <option value="clan">Clan</option>
+              <option value="family">Famille</option>
+              <option value="race">Race</option>
+              <option value="organization">Organisation</option>
+              <option value="firm">Entreprise</option>
+              <option value="religion">Religion</option>
+              <option value="tribe">Tribu</option>
+              <option value="other">Autre</option>
+            </select>
+          </label>
+
+          <label>Ajouter un membre :
+            <input type="text" id="memberSearch" placeholder="Nom du personnage..." />
+            <ul id="searchResults"></ul>
+          </label>
+          
+          <div id="selectedMembers">
+            <p>Membres sélectionnés :</p>
+            <ul id="memberList"></ul>
+          </div>
+
+          <button type="submit">Créer le groupe</button>
+          <button type="button" class="modal-close-btn">Annuler</button>
+        </form>
+      </div>
     </div>
 
-    <div id="peuples" class="tab-content">
-      <h2>Peuples</h2>
-      <button class="btn-primary">➕ Ajouter un peuple</button>
+    <div id="group" class="tab-content">
+      <h2>Groupes</h2>
+      <button id="openGroupForm" class="btn-primary">➕ Ajouter un groupe</button>
       <p>Les Yaphets, les Ténites, les Chamites…</p>
     </div>
 
